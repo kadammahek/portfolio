@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahek Kadam | AI & Frontend Developer</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Cosmic Emerald & Sapphire Theme --- */
+        :root {
+            --bg-main: #09090b; /* Obsidian Black */
+            --surface-bg: rgba(24, 24, 27, 0.5); /* Translucent dark gray */
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --primary: #10b981; /* Emerald Green */
+            --secondary: #3b82f6; /* Sapphire Blue */
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Ambient Background Glows --- */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: float-glow 10s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float-glow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- Custom Interactive Cursor --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid rgba(16, 185, 129, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        }
+
+        /* --- Layout & Typography --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section { padding: 120px 0; }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            font-weight: 700;
+        }
+
+        /* --- Modern Buttons --- */
+        .btn-primary, .btn-secondary {
+            padding: 12px 32px;
+            border-radius: 8px; /* Sharper, modern edges */
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            border: 1px solid var(--surface-border);
+            margin-left: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* --- Navbar --- */
+        #navbar {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 25px 0;
+            background: rgba(9, 9, 11, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        #navbar.scrolled {
+            padding: 15px 0;
+            background: rgba(9, 9, 11, 0.85);
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .logo span { color: var(--primary); }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a {
+            font-size: 1rem; font-weight: 400; color: var(--text-muted);
+            transition: var(--transition); position: relative;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center;
+            padding-top: 80px; position: relative;
+        }
+
+        .hero-layout {
+            display: flex; align-items: center; justify-content: space-between; gap: 50px; width: 100%;
+        }
+
+        .hero-content { flex: 1; max-width: 650px; z-index: 2; }
+
+        .hero h1 { font-size: 5rem; line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
+
+        /* Typing Effect */
+        .hero .role {
+            font-size: 2rem; color: var(--primary);
+            margin-bottom: 25px; min-height: 50px; font-weight: 300;
+        }
+        
+        .cursor-blink {
+            display: inline-block; width: 3px; background-color: var(--primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+        .hero .summary {
+            font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; font-weight: 300;
+        }
+
+        /* Morphing Profile Image */
+        .hero-img-container {
+            flex: 1; display: flex; justify-content: center; align-items: center; position: relative;
+        }
+
+        .hero-img {
+            width: 400px; height: 400px; object-fit: cover;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 8s ease-in-out infinite;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+            z-index: 2; transition: var(--transition);
+        }
+
+        .hero-img:hover {
+            transform: scale(1.03); box-shadow: 0 0 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .img-backdrop {
+            position: absolute; width: 360px; height: 360px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            animation: pulse-glow 5s infinite alternate; z-index: 1;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        @keyframes pulse-glow { 0% { transform: scale(0.9); opacity: 0.3; } 100% { transform: scale(1.1); opacity: 0.6; } }
+
+        /* --- 3D Tilt Cards --- */
+        .grid-layout {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; perspective: 1000px;
+        }
+
+        .tilt-card {
+            background: var(--surface-bg); border: 1px solid var(--surface-border);
+            border-radius: 16px; padding: 40px; backdrop-filter: blur(10px);
+            transform-style: preserve-3d; transition: transform 0.1s ease, border-color 0.3s ease; position: relative;
+        }
+
+        .tilt-card > * { transform: translateZ(30px); position: relative; z-index: 1; }
+
+        .tilt-card:hover { border-color: rgba(16, 185, 129, 0.4); }
+
+        .skill-icon {
+            font-size: 2.5rem; margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .tilt-card h3 { font-size: 1.4rem; margin-bottom: 10px; font-weight: 600; }
+        .tilt-card p { color: var(--text-muted); font-size: 0.95rem; font-weight: 300; }
+
+        .features-list { margin: 20px 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 300; }
+        .features-list li { margin-bottom: 10px; padding-left: 20px; position: relative; }
+        .features-list li::before {
+            content: "→"; position: absolute; left: 0; color: var(--primary); font-size: 1rem; font-family: monospace;
+        }
+
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; }
+        .tech-stack span {
+            background: rgba(255, 255, 255, 0.03); color: var(--text-main);
+            border: 1px solid var(--surface-border); padding: 5px 12px;
+            border-radius: 6px; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.5px;
+        }
+
+        /* --- Timeline --- */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::after {
+            content: ''; position: absolute; width: 2px; background: var(--surface-border);
+            top: 0; bottom: 0; left: 50%; margin-left: -1px;
+        }
+
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; }
+        .timeline-item:nth-child(odd) { left: 0; }
+        .timeline-item:nth-child(even) { left: 50%; }
+
+        .timeline-dot {
+            position: absolute; width: 16px; height: 16px; background-color: var(--primary);
+            border: 4px solid var(--bg-main); border-radius: 50%; z-index: 1; top: 18px; right: -8px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .timeline-item:nth-child(even) .timeline-dot { left: -8px; }
+
+        .timeline-content {
+            padding: 30px; background: var(--surface-bg); border: 1px solid var(--surface-border);
+            border-radius: 16px; transition: var(--transition);
+        }
+        .timeline-content:hover { transform: translateY(-5px); border-color: rgba(59, 130, 246, 0.4); }
+
+        .timeline-content h4 { font-size: 1.3rem; color: var(--text-main); }
+        .timeline-content .date {
+            display: inline-block; color: var(--secondary); font-weight: 600;
+            margin: 8px 0 15px 0; font-size: 0.85rem; letter-spacing: 1px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 80px 0 40px; border-top: 1px solid var(--surface-border);
+            text-align: center; position: relative; overflow: hidden;
+        }
+
+        .contact-links { display: flex; justify-content: center; gap: 40px; margin: 40px 0; }
+        .social-link {
+            font-size: 1.5rem; color: var(--text-muted); transition: var(--transition);
+            display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 0.95rem; font-weight: 300;
+        }
+        .social-link i { font-size: 1.8rem; color: var(--text-muted); transition: var(--transition); }
+        .social-link:hover { color: var(--text-main); }
+        .social-link:hover i { color: var(--primary); transform: translateY(-3px); }
+
+        /* --- Animations & Responsive --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 992px) {
+            .hero-layout { flex-direction: column-reverse; text-align: center; }
+            .hero-content { align-items: center; display: flex; flex-direction: column; }
+            .hero h1 { font-size: 3.8rem; }
+            .nav-links, .nav-btn { display: none; } 
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item:nth-child(even) { left: 0%; }
+            .timeline-item:nth-child(odd) .timeline-dot, .timeline-item:nth-child(even) .timeline-dot { left: 23px; right: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Ambient Orbs -->
+    <div class="bg-glow blob-1"></div>
+    <div class="bg-glow blob-2"></div>
+
+    <!-- Interactive Cursor Elements -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="#home" class="logo">MK<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+            </ul>
+            <a href="#contact" class="btn-primary nav-btn">Let's Talk</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="container hero-layout reveal">
+            <!-- Text Content (Welcome line removed) -->
+            <div class="hero-content">
+                <h1>Hi, I'm Mahek Kadam</h1>
+                <div class="role">
+                    <span class="typed-text"></span><span class="cursor-blink">&nbsp;</span>
+                </div>
+                <p class="summary">
+                    3rd-year B.E. Computer Engineering student and <strong>Finalist at the Google Cloud Agentic AI Day Hackathon.</strong> Bridging the gap between intelligent AI systems and stunning, interactive frontend experiences.
+                </p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn-primary">Explore My Work</a>
+                    <a href="mailto:kadammahek28@gmail.com" class="btn-secondary">Contact Me</a>
+                </div>
+            </div>
+
+            <!-- Morphing Image -->
+            <div class="hero-img-container">
+                <div class="img-backdrop"></div>
+                <img src="img.jpeg" alt="Mahek Kadam" class="hero-img">
+            </div>
+        </div>
+    </header>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container reveal">
+            <h2 class="section-title">Technical Arsenal</h2>
+            <div class="grid-layout">
+                <div class="tilt-card">
+                    <i class="fa-solid fa-laptop-code skill-icon"></i>
+                    <h3>Frontend & Programming</h3>
+                    <p>React, JavaScript, HTML/CSS, Python, C++</p>
+                </div>
+                <div class="tilt-card">
+                    <i class="fa-solid fa-brain skill-icon"></i>
+                    <h3>AI & Frameworks</h3>
+                    <p>Darts, Deepface, Gemini LLM, LangChain</p>
+                </div>
+                <div class="tilt-card">
+                    <i class="fa-solid fa-database skill-icon"></i>
+                    <h3>Databases & Backend</h3>
+                    <p>Node.js, FastAPI, Django, MongoDB, SQL</p>
+                </div>
+                <div class="tilt-card">
+                    <i class="fa-solid fa-layer-group skill-icon"></i>
+                    <h3>Design & Platforms</h3>
+                    <p>Figma, Blender 3D, Spline, GitHub, VS Code</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container reveal">
+            <h2 class="section-title">Featured Creations</h2>
+            <div class="grid-layout">
+                
+                <!-- Project 1 -->
+                <div class="tilt-card">
+                    <h3>lumi.ai - Finance Assistant</h3>
+                    <p>An interactive, AI-powered financial co-pilot built with React to reduce financial stress for students.</p>
+                    <ul class="features-list">
+                        <li>Smooth, intuitive frontend dashboard for expense tracking.</li>
+                        <li>Time-series forecasting using <strong>Darts</strong> to predict spending.</li>
+                        <li>Interactive financial calendar with visual risk alerts.</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span>React</span><span>Node.js</span><span>FastAPI</span><span>Gemini LLM</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="tilt-card">
+                    <h3>StudyCoach AI</h3>
+                    <p>A full-stack application providing an engaging frontend interface to predict and visualize academic performance.</p>
+                    <ul class="features-list">
+                        <li>Interactive UI to input behavioral data natively.</li>
+                        <li>FastAPI integration serving real-time study predictions.</li>
+                        <li>Personalized dashboard for study recommendations.</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span>React</span><span>Python</span><span>Machine Learning</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="tilt-card">
+                    <h3>Emoticon - Empathetic Chatbot</h3>
+                    <p>Real-time computer vision system integrated with a responsive chat interface that adapts to user emotions.</p>
+                    <ul class="features-list">
+                        <li>Real-time facial emotion detection UI integration.</li>
+                        <li>Empathetic AI conversational frontend.</li>
+                        <li>Scalable backend data handling with Django.</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span>Python</span><span>Django</span><span>DeepFace</span><span>Gemini API</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Achievements -->
+    <section id="experience" class="section">
+        <div class="container reveal">
+            <h2 class="section-title">Journey & Milestones</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Finalist (Top 15 Teams)</h4>
+                        <span class="date">2025</span>
+                        <p><strong>Google Cloud Agentic AI Day Hackathon, Bangalore</strong><br> Designed and built an AI-driven, agent-based system evaluated among top teams nationwide.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>Secretary</h4>
+                        <span class="date">Aug 2025 – Present</span>
+                        <p><strong>ACMxPCCOER Student Chapter</strong><br> Leading execution of large-scale technical events and coordinating UI/UX and dev initiatives.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>3rd Prize</h4>
+                        <span class="date">2023</span>
+                        <p><strong>Project-Based Learning Competition</strong><br> Developed an interactive, highly visual educational website.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact">
+        <div class="container reveal">
+            <h2>Let's craft interactive experiences.</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 15px auto;">
+                Seeking a technical internship to contribute to production-level frontend and AI-integrated projects.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:kadammahek28@gmail.com" class="social-link">
+                    <i class="fa-solid fa-envelope"></i> Email Me
+                </a>
+                <a href="tel:+919326345997" class="social-link">
+                    <i class="fa-solid fa-phone"></i> +91 9326345997
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+            <p style="color: rgba(255,255,255,0.2); font-size: 0.85rem;">&copy; 2026 Mahek Kadam. Engineered with passion.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 1. Custom Interactive Cursor
+            const cursorDot = document.getElementById("cursor-dot");
+            const cursorOutline = document.getElementById("cursor-outline");
+
+            window.addEventListener("mousemove", (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            // Hover effects for the cursor
+            const hoverElements = document.querySelectorAll("a, button, .tilt-card, .timeline-content");
+            hoverElements.forEach(el => {
+                el.addEventListener("mouseenter", () => {
+                    cursorOutline.style.transform = "translate(-50%, -50%) scale(1.5)";
+                    cursorOutline.style.borderColor = "rgba(59, 130, 246, 0.8)"; /* Changes to Blue on hover */
+                    cursorOutline.style.backgroundColor = "rgba(16, 185, 129, 0.1)"; 
+                });
+                el.addEventListener("mouseleave", () => {
+                    cursorOutline.style.transform = "translate(-50%, -50%) scale(1)";
+                    cursorOutline.style.borderColor = "rgba(16, 185, 129, 0.5)"; /* Back to Emerald */
+                    cursorOutline.style.backgroundColor = "transparent";
+                });
+            });
+
+            // 2. Typing Effect (Colors match new theme automatically based on CSS classes)
+            const typedTextSpan = document.querySelector(".typed-text");
+            const textArray =["AI & Frontend Developer", "UI/UX Enthusiast", "Creative Problem Solver"];
+            const typingDelay = 100;
+            const erasingDelay = 50;
+            const newTextDelay = 2000;
+            let textArrayIndex = 0;
+            let charIndex = 0;
+
+            function type() {
+                if (charIndex < textArray[textArrayIndex].length) {
+                    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, typingDelay);
+                } else {
+                    setTimeout(erase, newTextDelay);
+                }
+            }
+
+            function erase() {
+                if (charIndex > 0) {
+                    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(erase, erasingDelay);
+                } else {
+                    textArrayIndex++;
+                    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+                    setTimeout(type, typingDelay + 500);
+                }
+            }
+            setTimeout(type, 1000);
+
+            // 3. 3D Tilt Effect for Cards
+            const tiltCards = document.querySelectorAll(".tilt-card");
+            tiltCards.forEach(card => {
+                card.addEventListener("mousemove", (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; 
+                    const y = e.clientY - rect.top;  
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -8;
+                    const rotateY = ((x - centerX) / centerX) * 8;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                
+                card.addEventListener("mouseleave", () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+
+            // 4. Sticky Navbar & Scroll Reveal
+            const navbar = document.getElementById("navbar");
+            const revealElements = document.querySelectorAll(".reveal");
+
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add("scrolled");
+                } else {
+                    navbar.classList.remove("scrolled");
+                }
+
+                revealElements.forEach(el => {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = el.getBoundingClientRect().top;
+                    const elementVisible = 100;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        el.classList.add("active");
+                    }
+                });
+            });
+
+            window.dispatchEvent(new Event("scroll"));
+        });
+    </script>
+</body>
+</html>
